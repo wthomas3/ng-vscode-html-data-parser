@@ -24,7 +24,7 @@ extractor.tagFormatter = (jsDoc) => {
 };
 
 const htmlData: HtmlData = {
-  version: '1.1',
+  version: 1.1,
   tags: []
 };
 
@@ -34,7 +34,7 @@ files.forEach(file => {
   // todo: use extractTags
   const tag = extractor.extractTag(source);
   if (tag) {
-    htmlData.tags.push(tag);
+    htmlData.tags?.push(tag);
   }
 });
 
