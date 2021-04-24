@@ -1,1 +1,2 @@
-# ng-vscode-html-data-parser
+# Angular Custom HTML Data Parser for Visual Studio Code
+
