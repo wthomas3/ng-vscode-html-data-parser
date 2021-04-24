@@ -4,13 +4,13 @@ import * as path from 'path';
 export type Config = {
   dest: string;
   files: string;
-  formatter: 'simple';
+  // formatter: 'simple';
 };
 
 const DEFAULT_CONFIG: Config = {
   dest: 'custom-html-data.json',
   files: '**/*.ts',
-  formatter: 'simple'
+  // formatter: 'simple'
 };
 
 export const loadConfig = (): Config => {
@@ -34,15 +34,14 @@ const readConfigArgs = () => {
       case '--dest':
         config['dest'] = args[++i];
         break;
-      case '--fs':
+      case '--f':
       case '--files':
         config['files'] = args[++i];
         break;
-      case '--f':
-      case '--formatter':
-        (config['formatter'] as string) = args[++i];
-        validateValue((config['formatter'] as string), 'simple');
-        break;
+      // case '--formatter':
+      //   (config['formatter'] as string) = args[++i];
+      //   validateValue((config['formatter'] as string), 'simple');
+      //   break;
       }
     }
     return config;
@@ -70,10 +69,10 @@ const readConfigFile = () => {
     if (configJson.files) {
       config['files'] = configJson.files;
     }
-    if (configJson.formatter) {
-      config['formatter'] = configJson.formatter;
-      validateValue((config['formatter'] as string), 'simple');
-    }
+    // if (configJson.formatter) {
+    //   config['formatter'] = configJson.formatter;
+    //   validateValue((config['formatter'] as string), 'simple');
+    // }
     return config;
   } catch (ex) {
     console.error(`Could not load configuration file: ${ex}`);
@@ -81,11 +80,11 @@ const readConfigFile = () => {
   }
 };
 
-const validateValue = (actualValue: string, ...potentialValues: string[]): void => {
-  for (const potential of potentialValues) {
-    if (potential === actualValue) {
-      return;
-    }
-  }
-  throw new Error(`Unexpected value ${actualValue}. Available values: ${potentialValues}`);
-};
+// const validateValue = (actualValue: string, ...potentialValues: string[]): void => {
+//   for (const potential of potentialValues) {
+//     if (potential === actualValue) {
+//       return;
+//     }
+//   }
+//   throw new Error(`Unexpected value ${actualValue}. Available values: ${potentialValues}`);
+// };
