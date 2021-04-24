@@ -105,3 +105,6 @@ dist
 
 # JavaScript compiled files
 *.js
+
+# Generated custom html data output
+custom-html-data.json

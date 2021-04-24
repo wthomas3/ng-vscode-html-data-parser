@@ -20,25 +20,23 @@ const SimpleTagDescriptionFormatter: TagDescriptionFormatter = (jsDoc: ts.JSDoc)
 };
 
 export class TagExtractor {
-  private readonly sourceFile!: ts.SourceFile;
   public tagFormatter: TagDescriptionFormatter = SimpleTagDescriptionFormatter;
   public attributeFormatter: AttributeDescriptionFormatter = SimpleAttributeDescriptionFormatter;
 
-  public constructor(code: string) {
-    this.sourceFile = ts.createSourceFile('x.ts', code, ts.ScriptTarget.Latest);
-  }
-
-  public extractTag(): Tag | undefined {
-    const classDeclaration = this.findFirstNode(this.sourceFile, ts.SyntaxKind.ClassDeclaration);
+  public extractTag(code: string): Tag | undefined {
+    const sourceFile = ts.createSourceFile('x.ts', code, ts.ScriptTarget.Latest);
+    const classDeclaration = this.findFirstNode(sourceFile, ts.SyntaxKind.ClassDeclaration);
     if (!classDeclaration) { return undefined; }
 
     return this.extractTagFromNode(classDeclaration as ts.ClassDeclaration);
   }
 
   // todo: this gets duplicate components
-  public extractTags(): Tag[] {
+  public extractTags(code: string): Tag[] {
+    const sourceFile = ts.createSourceFile('x.ts', code, ts.ScriptTarget.Latest);
+
     const tags: Tag[] = [];
-    const components = this.findNodes(this.sourceFile, ts.SyntaxKind.ClassDeclaration);
+    const components = this.findNodes(sourceFile, ts.SyntaxKind.ClassDeclaration);
     components.forEach(c => {
       const tag = this.extractTagFromNode(c as ts.ClassDeclaration);
       if (tag) {
