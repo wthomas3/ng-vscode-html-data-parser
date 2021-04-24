@@ -1,0 +1,1 @@
+# ng-vscode-html-data-parser
