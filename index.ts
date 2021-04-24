@@ -7,29 +7,14 @@ import { HtmlData } from './src/html-data';
 import { TagExtractor } from './src/tag-extractor';
 
 const config: Config = loadConfig();
-
 const extractor = new TagExtractor();
-// todo: provide this as an external JavaScript file
-extractor.tagFormatter = (jsDoc) => {
-  let comment = jsDoc?.comment ?? '';
-  if (jsDoc.tags) {
-    for (const tag of jsDoc.tags) {
-      switch (tag.tagName.text) {
-      case 'example':
-        comment += `\n\n#### Example \n\n${tag.comment}`;
-      }
-    }
-  }
-  return comment;
-};
-
 const htmlData: HtmlData = {
   version: 1.1,
   tags: []
 };
 
-const files = glob.sync(path.join(__dirname, '../') + '/' + config.files);
-files.forEach(file => {
+const filePattern = path.isAbsolute(config.files) ? config.files : path.join(__dirname, config.files);
+glob.sync(filePattern).forEach(file => {
   const source = fs.readFileSync(file, 'utf-8');
   // todo: use extractTags
   const tag = extractor.extractTag(source);
@@ -39,8 +24,9 @@ files.forEach(file => {
 });
 
 const htmlDataJson = JSON.stringify(htmlData, undefined, 2);
+const outputPath = path.isAbsolute(config.dest) ? config.dest : path.join(__dirname, config.dest);
 try {
-  fs.writeFileSync(config.dest, htmlDataJson);
+  fs.writeFileSync(outputPath, htmlDataJson);
 } catch (ex) {
   console.error(`Could not write to output file ${config.dest}.`);
   process.exit(1);
