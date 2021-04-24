@@ -7,12 +7,6 @@ export type Config = {
   formatter: 'simple';
 };
 
-type SparseConfig = {
-  dest?: string;
-  files?: string;
-  formatter?: 'simple';
-};
-
 const DEFAULT_CONFIG: Config = {
   dest: 'custom-html-data.json',
   files: '**/*.ts',
@@ -30,7 +24,7 @@ export const loadConfig = (): Config => {
 };
 
 const readConfigArgs = () => {
-  const config: SparseConfig = {};
+  const config: Partial<Config> = {};
 
   try {
     const args = process.argv.slice(2);
@@ -59,7 +53,7 @@ const readConfigArgs = () => {
 };
 
 const readConfigFile = () => {
-  const config: SparseConfig = {};
+  const config: Partial<Config> = {};
 
   try {
     const configFilePath = path.join(__dirname, '.ng-html-data.json');

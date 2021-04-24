@@ -2,13 +2,14 @@ import * as fs from 'fs';
 import * as glob from 'glob';
 import * as path from 'path';
 
-import { Config, loadConfig } from './src/config';
+import { Config, loadConfig } from './src/internal/config';
 import { HtmlData } from './src/html-data';
 import { TagExtractor } from './src/tag-extractor';
 
 const config: Config = loadConfig();
 
 const extractor = new TagExtractor();
+// todo: provide this as an external JavaScript file
 extractor.tagFormatter = (jsDoc) => {
   let comment = jsDoc?.comment ?? '';
   if (jsDoc.tags) {

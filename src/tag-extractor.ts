@@ -1,28 +1,35 @@
 import * as ts from 'typescript';
 
-import { AttributeDescriptionFormatter } from './attribute-description-formatter';
 import { Attribute, Tag } from './html-data';
-import { TagDescriptionFormatter } from './tag-description-formatter';
+import {
+  AttributeDescriptionFormatter, SimpleAttributeDescriptionFormatter, 
+  SimpleTagDescriptionFormatter, TagDescriptionFormatter
+} from './formatters';
 
 // todo: should we support @ignore to not add documentation?
 
 // todo: what type actually holds jsDoc?
-interface JsDocNode {
-  jsDoc?: ts.JSDoc[];
-}
+interface JsDocNode { jsDoc?: ts.JSDoc[]; }
 
-const SimpleAttributeDescriptionFormatter: AttributeDescriptionFormatter = (jsDoc: ts.JSDoc) => {
-  return jsDoc.comment ?? '';
-};
-
-const SimpleTagDescriptionFormatter: TagDescriptionFormatter = (jsDoc: ts.JSDoc) => {
-  return jsDoc.comment ?? '';
-};
-
+/**
+ * A utility class to extract custom HTML-data tags from components and directives found within an Angular TypeScript file.
+ */
 export class TagExtractor {
+  /**
+   * Gets or sets the formatter used when creating a component's description for a tag.
+   */
   public tagFormatter: TagDescriptionFormatter = SimpleTagDescriptionFormatter;
+  /**
+   * Gets or sets the formatter used when creating a component attribute's description.
+   */
   public attributeFormatter: AttributeDescriptionFormatter = SimpleAttributeDescriptionFormatter;
 
+  /**
+   * Attempts to extract a custom HTML-data tag from the component found in the supplied TypeScript code.
+   * 
+   * @param code The Angular TypeScript source code.
+   * @returns If a component is found, a proper custom HTML-data tag will be returned; undefined otherwise.
+   */
   public extractTag(code: string): Tag | undefined {
     const sourceFile = ts.createSourceFile('x.ts', code, ts.ScriptTarget.Latest);
     const classDeclaration = this.findFirstNode(sourceFile, ts.SyntaxKind.ClassDeclaration);
@@ -31,6 +38,12 @@ export class TagExtractor {
     return this.extractTagFromNode(classDeclaration as ts.ClassDeclaration);
   }
 
+  /**
+   * Attempts to extract a custom HTML-data tag from all components found in the supplied TypeScript code.
+   * 
+   * @param code The Angular TypeScript source code.
+   * @returns A set of proper custom HTML-data tags created from components in the code file.
+   */
   // todo: this gets duplicate components
   public extractTags(code: string): Tag[] {
     const sourceFile = ts.createSourceFile('x.ts', code, ts.ScriptTarget.Latest);
@@ -117,8 +130,8 @@ export class TagExtractor {
 
   private getComponentSelector(classDeclaration: ts.ClassDeclaration): string | undefined {
     const componentDecorator = classDeclaration.decorators
-      ?.filter(d => 
-        this.getExpressionEscapedText(d.expression) === 'Component' || 
+      ?.filter(d =>
+        this.getExpressionEscapedText(d.expression) === 'Component' ||
         this.getExpressionEscapedText(d.expression) === 'Directive'
       )?.[0];
     if (!componentDecorator) { return undefined; }
