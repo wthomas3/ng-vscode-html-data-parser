@@ -61,14 +61,21 @@ export class TagExtractor {
 
   private extractTagFromNode(component: ts.ClassDeclaration): Tag | undefined {
     const componentSelector = this.getComponentSelector(component);
-    if (!componentSelector) { return; }
+    if (!componentSelector) { return undefined; }
+
+    const selectorParts = componentSelector.split(',').map(s => s.trim());
+    // todo: this only captures full element selectors, not attribute selectors. 
+    //       we should support both global attributes (e.g.: [global-element-attribute]) and
+    //       element specific attributes (e.g.: tag-name[tag-attribute])
+    const tagName = selectorParts.filter(s => !s.includes('['))[0];
+    if (!tagName) { return undefined; }
 
     const jsDoc = this.getJsDoc(component);
-    const classComment = jsDoc ? this.tagFormatter(jsDoc) : '';
+    const tagDescription = jsDoc ? this.tagFormatter(jsDoc) : '';
 
     return {
-      name: componentSelector,
-      description: classComment,
+      name: tagName,
+      description: tagDescription,
       attributes: this.getAttributes(component)
     };
   }
