@@ -54,6 +54,19 @@ This will chose all TypeScript files found in the "src" directory:
 npx @wthomas/ng-vscode-html-data-parser --files src/**/*.ts
 ```
 
+#### Config file
+
+This library supports a separate config file called `.ng-html-data.json`, which can be used to provide the same functionality available in the command line options. Simply create the `json` file and fill it with the configuration values necessary:
+
+__Example__
+
+```json
+{
+  "dest": "my-custom-html-data.json",
+  "files": "src/**/*.ts"
+}
+```
+
 ### Setting up VS Code for Custom HTML Data
 
 Setting up VS Code to use the output files from this library is very easy. Simply open up your folder or workspace settings and add this file to the `html.customData` setting. You may need to reload VS Code for your changes to take place.
