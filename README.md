@@ -4,7 +4,7 @@ VS Code has the capability to load custom web component information into the HTM
 
 Well now you can do just that.
 
-This small library can read your Angular application source directory for components and directives and generate this custom HTML data for VS Code to consume.
+This small library can read your Angular application source directory for components and directives and generate custom HTML data for VS Code to consume.
 
 Add it to your build pipelines to keep your data up-to-date. Build extensions for your teams to use and provide built-in documentation around your organization's component system. Include it with your npm packages to enable your end users to keep coding without having to go back to the external documentation.
 
