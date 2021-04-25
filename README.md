@@ -46,7 +46,7 @@ This option will tell the library where to find the Angular component files. Thi
 
 By default, this is all TypeScript files found from the root package directory (e.g.: `**/*.ts`);
 
-__Example__
+_Example_
 
 This will chose all TypeScript files found in the "src" directory:
 
