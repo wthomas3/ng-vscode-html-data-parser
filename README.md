@@ -58,7 +58,7 @@ npx ng-vscode-html-data-parser --files src/**/*.ts
 
 This library supports a separate config file called `.ng-html-data.json`, which can be used to provide the same functionality available in the command line options. Simply create the `json` file and fill it with the configuration values necessary:
 
-__Example__
+_Example_
 
 ```json
 {
