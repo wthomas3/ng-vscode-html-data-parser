@@ -1,6 +1,6 @@
 {
   "name": "ng-vscode-html-data-parser",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha.1",
   "description": "This small library can read your Angular application source directory for components and directives and generate custom HTML data for VS Code to consume.",
   "main": "dist/index.js",
   "scripts": {
