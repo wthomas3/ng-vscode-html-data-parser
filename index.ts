@@ -14,7 +14,7 @@ const htmlData: HtmlData = {
   tags: []
 };
 
-const filePattern = path.isAbsolute(config.files) ? config.files : path.join(__dirname, config.files);
+const filePattern = path.isAbsolute(config.files) ? config.files : path.join(process.cwd(), config.files);
 glob.sync(filePattern).forEach(file => {
   const source = fs.readFileSync(file, 'utf-8');
   extractor.extractTags(source).forEach(tag => {
@@ -23,7 +23,7 @@ glob.sync(filePattern).forEach(file => {
 });
 
 const htmlDataJson = JSON.stringify(htmlData, undefined, 2);
-const outputPath = path.isAbsolute(config.dest) ? config.dest : path.join(__dirname, config.dest);
+const outputPath = path.isAbsolute(config.dest) ? config.dest : path.join(process.cwd(), config.dest);
 try {
   fs.writeFileSync(outputPath, htmlDataJson);
 } catch (ex) {

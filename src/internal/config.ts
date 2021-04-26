@@ -55,7 +55,7 @@ const readConfigFile = () => {
   const config: Partial<Config> = {};
 
   try {
-    const configFilePath = path.join(__dirname, '.ng-html-data.json');
+    const configFilePath = path.join(process.cwd(), '.ng-html-data.json');
     if (!fs.existsSync(configFilePath)) {
       return config;
     }
