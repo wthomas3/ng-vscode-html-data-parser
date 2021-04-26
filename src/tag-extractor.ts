@@ -29,6 +29,7 @@ export class TagExtractor {
    * 
    * @param code The Angular TypeScript source code.
    * @returns If a component is found, a proper custom HTML-data tag will be returned; undefined otherwise.
+   * @deprecated Use `extractTags()` instead.
    */
   public extractTag(code: string): Tag | undefined {
     const sourceFile = ts.createSourceFile('x.ts', code, ts.ScriptTarget.Latest);
@@ -44,7 +45,6 @@ export class TagExtractor {
    * @param code The Angular TypeScript source code.
    * @returns A set of proper custom HTML-data tags created from components in the code file.
    */
-  // todo: this gets duplicate components
   public extractTags(code: string): Tag[] {
     const sourceFile = ts.createSourceFile('x.ts', code, ts.ScriptTarget.Latest);
 
@@ -102,17 +102,12 @@ export class TagExtractor {
 
   private findNodes(node: ts.Node, kind: ts.SyntaxKind): ts.Node[] {
     const nodes: ts.Node[] = [];
-    if (node.kind === kind) {
-      nodes.push(node);
-    }
-
     node.forEachChild(child => {
       if (child.kind === kind) {
         nodes.push(child);
       }
       this.findNodes(child, kind).forEach(n => nodes.push(n));
     });
-
     return nodes;
   }
 
@@ -146,7 +141,8 @@ export class TagExtractor {
     const decoratorArguments = (componentDecorator.expression as any).arguments?.[0]; // ts.ObjectLiteral | undefined
     if (!decoratorArguments) { return undefined; }
 
-    const selectorProperty = decoratorArguments.properties.filter((p: any) => p.name.escapedText === 'selector')?.[0] as (ts.PropertyAssignment | undefined);
+    const properties = decoratorArguments.expresson?.properties ?? decoratorArguments.properties ?? [];
+    const selectorProperty = properties?.filter((p: any) => p.name.escapedText === 'selector')?.[0] as (ts.PropertyAssignment | undefined);
     if (selectorProperty) {
       return (selectorProperty.initializer as ts.StringLiteral).text;
     }

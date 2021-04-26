@@ -17,11 +17,9 @@ const htmlData: HtmlData = {
 const filePattern = path.isAbsolute(config.files) ? config.files : path.join(__dirname, config.files);
 glob.sync(filePattern).forEach(file => {
   const source = fs.readFileSync(file, 'utf-8');
-  // todo: use extractTags
-  const tag = extractor.extractTag(source);
-  if (tag) {
+  extractor.extractTags(source).forEach(tag => {
     htmlData.tags?.push(tag);
-  }
+  });
 });
 
 const htmlDataJson = JSON.stringify(htmlData, undefined, 2);
