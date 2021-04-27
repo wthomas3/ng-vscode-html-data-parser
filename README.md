@@ -17,7 +17,7 @@ This is still a work in progress and new features will be added as necessary. Fe
 Generating custom HTML data for VS Code is as simple as:
 
 ```bash
-npx ng-vscode-html-data-parser
+npx ng-html-data
 ```
 
 The default behavior will look for any `*.ts` within your package directory and attempt to generate custom HTML data from any components or directives found.
@@ -37,7 +37,7 @@ _Example_
 This will write the custom HTML data file to the package directory with the name "my-custom.html-data.json":
 
 ```bash
-npx ng-vscode-html-data-parser --dest my-custom.html-data.json
+npx ng-html-data --dest my-custom.html-data.json
 ```
 
 [`--f`, `--files`] `{filePattern}`
@@ -51,7 +51,7 @@ _Example_
 This will chose all TypeScript files found in the "src" directory:
 
 ```bash
-npx ng-vscode-html-data-parser --files src/**/*!(*.spec).ts
+npx ng-html-data --files src/**/*!(*.spec).ts
 ```
 
 #### Config file
