@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as glob from 'glob';
 import * as path from 'path';
 
-import { Config, loadConfig } from './src/internal/config';
+import { Config, loadConfig } from './internal/config';
 import { HtmlData } from './src/html-data';
 import { TagExtractor } from './src/tag-extractor';
 
