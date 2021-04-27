@@ -9,7 +9,7 @@ export type Config = {
 
 const DEFAULT_CONFIG: Config = {
   dest: 'custom.html-data.json',
-  files: '**/*.ts',
+  files: '**/!(*.spec).ts',
   // formatter: 'simple'
 };
 
