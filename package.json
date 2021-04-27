@@ -11,9 +11,6 @@
     "start": "tsc && node dist/index.js",
     "test": "jest --collect-coverage"
   },
-  "files": [
-    "dist/**"
-  ],
   "bin": "dist/index.js",
   "author": "Wesley Thomas",
   "license": "MIT",
