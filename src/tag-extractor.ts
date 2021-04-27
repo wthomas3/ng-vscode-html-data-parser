@@ -7,6 +7,15 @@ import {
 } from './formatters';
 
 // todo: should we support @ignore to not add documentation?
+// disclaimer: there are a fair number of assumptions here that the Angular project this runs against is able to build and run and follows best practices.
+
+/**
+ * A type that contains HTML data extracted from a component or directive class.
+ */
+export type ExtractData = {
+  tags: Tag[];
+  globalAttributes: Attribute[];
+};
 
 // todo: what type actually holds jsDoc?
 interface JsDocNode { jsDoc?: ts.JSDoc[]; }
@@ -44,6 +53,7 @@ export class TagExtractor {
    * 
    * @param code The Angular TypeScript source code.
    * @returns A set of proper custom HTML-data tags created from components in the code file.
+   * @deprecated Use `extract()` instead.
    */
   public extractTags(code: string): Tag[] {
     const sourceFile = ts.createSourceFile('x.ts', code, ts.ScriptTarget.Latest);
@@ -57,6 +67,73 @@ export class TagExtractor {
       }
     });
     return tags;
+  }
+  
+  /**
+   * Attempts to extract a custom HTML-data from all components and directives found in the supplied TypeScript code.
+   * 
+   * @param code The Angular TypeScript source code.
+   * @returns A set of custom HTML-data created from components in the code file.
+   */
+  public extract(code: string): ExtractData {
+    const sourceFile = ts.createSourceFile('x.ts', code, ts.ScriptTarget.Latest);
+
+    const exportData: ExtractData = {
+      tags: [],
+      globalAttributes: []
+    };
+    const components = this.findNodes(sourceFile, ts.SyntaxKind.ClassDeclaration);
+    components.forEach(c => {
+      const data = this.extractHtmlDataFromNode(c as ts.ClassDeclaration);
+      data.tags.forEach(tag => exportData.tags.push(tag));
+      data.globalAttributes.forEach(attr => exportData.globalAttributes.push(attr));
+    });
+    return exportData;
+  }
+
+  private extractHtmlDataFromNode(component: ts.ClassDeclaration): ExtractData {
+    const data: ExtractData = {
+      tags: [],
+      globalAttributes: []
+    };
+
+    const componentSelector = this.getComponentSelector(component);
+    if (!componentSelector) { return data; }
+
+    const jsDoc = this.getJsDoc(component);
+    const description = jsDoc ? this.tagFormatter(jsDoc) : '';
+    const attributes = this.getAttributes(component);
+
+    componentSelector
+      .split(',')
+      .map(s => s.trim())
+      .forEach(selector => {
+        if (!selector.includes('[')) { // element name. e.g.: "test-element"
+          data.tags.push({
+            name: selector,
+            description: description,
+            attributes: attributes
+          });
+        } else if (selector.indexOf('[') !== 0) { // element attribute. e.g.: "test-element[required]"
+          const tagName = selector.substr(0, selector.indexOf('['));
+          const attributeName = selector.substring(selector.indexOf('[') + 1, selector.indexOf(']'));
+          data.tags.push({
+            name: tagName,
+            attributes: [{
+              name: attributeName,
+              description: description
+            }]
+          });
+        } else { // global attribute. e.g.: "[test-attribute]"          
+          const attributeName = selector.substring(selector.indexOf('[') + 1, selector.indexOf(']'));
+          data.globalAttributes.push({
+            name: attributeName,
+            description: description
+          });
+        }
+      });
+
+    return data;
   }
 
   private extractTagFromNode(component: ts.ClassDeclaration): Tag | undefined {
