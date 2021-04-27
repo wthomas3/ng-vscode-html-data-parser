@@ -32,42 +32,6 @@ export class TagExtractor {
    * Gets or sets the formatter used when creating a component attribute's description.
    */
   public attributeFormatter: AttributeDescriptionFormatter = SimpleAttributeDescriptionFormatter;
-
-  /**
-   * Attempts to extract a custom HTML-data tag from the component found in the supplied TypeScript code.
-   * 
-   * @param code The Angular TypeScript source code.
-   * @returns If a component is found, a proper custom HTML-data tag will be returned; undefined otherwise.
-   * @deprecated Use `extractTags()` instead.
-   */
-  public extractTag(code: string): Tag | undefined {
-    const sourceFile = ts.createSourceFile('x.ts', code, ts.ScriptTarget.Latest);
-    const classDeclaration = this.findFirstNode(sourceFile, ts.SyntaxKind.ClassDeclaration);
-    if (!classDeclaration) { return undefined; }
-
-    return this.extractTagFromNode(classDeclaration as ts.ClassDeclaration);
-  }
-
-  /**
-   * Attempts to extract a custom HTML-data tag from all components found in the supplied TypeScript code.
-   * 
-   * @param code The Angular TypeScript source code.
-   * @returns A set of proper custom HTML-data tags created from components in the code file.
-   * @deprecated Use `extract()` instead.
-   */
-  public extractTags(code: string): Tag[] {
-    const sourceFile = ts.createSourceFile('x.ts', code, ts.ScriptTarget.Latest);
-
-    const tags: Tag[] = [];
-    const components = this.findNodes(sourceFile, ts.SyntaxKind.ClassDeclaration);
-    components.forEach(c => {
-      const tag = this.extractTagFromNode(c as ts.ClassDeclaration);
-      if (tag) {
-        tags.push(tag);
-      }
-    });
-    return tags;
-  }
   
   /**
    * Attempts to extract a custom HTML-data from all components and directives found in the supplied TypeScript code.
@@ -134,47 +98,6 @@ export class TagExtractor {
       });
 
     return data;
-  }
-
-  private extractTagFromNode(component: ts.ClassDeclaration): Tag | undefined {
-    const componentSelector = this.getComponentSelector(component);
-    if (!componentSelector) { return undefined; }
-
-    const selectorParts = componentSelector.split(',').map(s => s.trim());
-    // todo: this only captures full element selectors, not attribute selectors. 
-    //       we should support both global attributes (e.g.: [global-element-attribute]) and
-    //       element specific attributes (e.g.: tag-name[tag-attribute])
-    const tagName = selectorParts.filter(s => !s.includes('['))[0];
-    if (!tagName) { return undefined; }
-
-    const jsDoc = this.getJsDoc(component);
-    const tagDescription = jsDoc ? this.tagFormatter(jsDoc) : '';
-
-    return {
-      name: tagName,
-      description: tagDescription,
-      attributes: this.getAttributes(component)
-    };
-  }
-
-  private findFirstNode(node: ts.Node, kind: ts.SyntaxKind): ts.Node | undefined {
-    if (node.kind === kind) {
-      return node;
-    }
-
-    let matchingNode: ts.Node | undefined;
-    node.forEachChild(child => {
-      if (matchingNode) {
-        return;
-      }
-
-      if (child.kind === kind) {
-        matchingNode = child;
-      } else {
-        matchingNode = this.findFirstNode(child, kind);
-      }
-    });
-    return matchingNode;
   }
 
   private findNodes(node: ts.Node, kind: ts.SyntaxKind): ts.Node[] {
