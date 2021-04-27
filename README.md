@@ -76,10 +76,9 @@ More information on how to set this up can be found here:
 
 ### TODO
 
-* Support global attributes provided by Angular attribute directives (e.g.: [required])
-* Support element specific attributes provided by Angular attribute directives (e.g.: input[required])
-* Support custom description formatters
+* Support custom description formatters.
 * Support for components found in type declaration files in precompiled libraries.
+* Support enum types.
 
 ### References
 
