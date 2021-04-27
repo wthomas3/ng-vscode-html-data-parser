@@ -1,5 +1,9 @@
 # Angular Custom HTML Data Parser for Visual Studio Code
 
+[![Build](https://github.com/wthomas3/ng-vscode-html-data-parser/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/wthomas3/ng-vscode-html-data-parser/actions/workflows/node.js.yml)
+[![NPM](https://badgen.net/npm/v/ng-vscode-html-data-parser?label=NPM)](https://www.npmjs.com/package/ng-vscode-html-data-parser)
+[![License](https://badgen.net/github/license/wthomas3/ng-vscode-html-data-parser?label=License)](https://github.com/wthomas3/ng-vscode-html-data-parser/blob/main/LICENSE)
+
 VS Code has the capability to load custom web component information into the HTML language services. These language services provide the IntelliSense we use everyday for code completion and functionality discovery. Imagine creating a set of directives and components within an Angular application and seeing those components within VS Code's own code hints.
 
 Well now you can do just that.
