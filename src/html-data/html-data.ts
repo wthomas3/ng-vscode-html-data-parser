@@ -1,4 +1,6 @@
+import { Attribute } from './attribute';
 import { Tag } from './tag';
+import { Value } from './value';
 
 /**
  * Format for loading Custom Data in VS Code's HTML support.
@@ -12,8 +14,12 @@ export interface HtmlData {
    * Custom HTML tags.
    */
   tags?: Tag[];
-  // todo: support global attributes (e.g.: non-element based attribute directives)
-  // "globalAttributes": [];
-  // todo: support value sets (e.g.: enum or union types)
-  // "valueSets": [];
+  /**
+   * Custom HTML global attributes.
+   */
+  globalAttributes?: Attribute[];
+  /**
+   * A set of attribute value. When an attribute refers to an attribute set, its value completion will use valuse from that set.
+   */
+  valueSets?: Value[];
 }

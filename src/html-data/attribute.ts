@@ -1,3 +1,7 @@
+import { MarkupDescription } from './markup-description';
+import { Reference } from './reference';
+import { Value } from './value';
+
 /**
  * Possible attribute for the tag.
  */
@@ -9,5 +13,17 @@ export interface Attribute {
   /**
    * Description of attribute shown in completion and hover.
    */
-  description?: string;
+  description?: string | MarkupDescription;
+  /**
+   * Name of the matching attribute value set
+   */
+  valueSet?: string;
+  /**
+   * A list of possible values for the attribute.
+   */
+  values?: Value[];
+  /**
+   * A list of references for the attribute shown in completion and hover.
+   */
+  references?: Reference[];
 }
