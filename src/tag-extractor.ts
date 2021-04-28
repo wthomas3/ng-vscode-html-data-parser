@@ -7,6 +7,7 @@ import {
 } from './formatters';
 
 // todo: should we support @ignore to not add documentation?
+// todo: add a class parser that we can query without fear of missing parts and that makes this class super simple
 // disclaimer: there are a fair number of assumptions here that the Angular project this runs against is able to build and run and follows best practices.
 
 /**
