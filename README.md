@@ -122,6 +122,7 @@ More information on how to set this up can be found here:
 ### TODO
 
 * Support for components found in type declaration files in precompiled libraries.
+* Support for inherited types.
 * Support enum types.
 
 ### References

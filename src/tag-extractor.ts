@@ -8,6 +8,8 @@ import {
 
 // todo: should we support @ignore to not add documentation?
 // todo: add a class parser that we can query without fear of missing parts and that makes this class super simple
+// todo: rename to `Extractor` since this doesn't only extract tags now
+
 // disclaimer: there are a fair number of assumptions here that the Angular project this runs against is able to build and run and follows best practices.
 
 /**
